@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444515307922",
+    "project_id": "econolista-app",
+    "storage_bucket": "econolista-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444515307922:android:e739a1d91d671fe819314b",
+        "android_client_info": {
+          "package_name": "br.com.econolistaapp.econolista_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyYhxtU3rj2iEzmQWk-VVGn_8VBM6YEHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
