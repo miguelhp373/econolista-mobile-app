@@ -1,8 +1,12 @@
+import 'package:econolista_app/app/shared/models/purchased_models.dart';
 import 'package:econolista_app/app/shared/widgets/drawer_sidebar/drawer_sidebar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:econolista_app/app/modules/home/tabs/my_purchases_made.dart';
 import 'package:econolista_app/app/modules/home/tabs/my_shopping_lists.dart';
+
+import '../purchase_details/purchase_details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +27,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerSidebar(
+        authUserPhoto: FirebaseAuth.instance.currentUser?.photoURL,
+        authUserName: FirebaseAuth.instance.currentUser?.displayName,
+      ),
       appBar: AppBar(
         title: const Text('EconoLista App'),
         bottom: TabBar(
@@ -39,7 +47,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
-      drawer: const DrawerSidebar(),
       body: TabBarView(
         controller: _tabController,
         children: const [
@@ -49,7 +56,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PurchaseDetails(
+              purchasedModels: PurchasedModels(
+                purchasedID: '',
+                description: '',
+                dateTimeCreated: DateTime.now(),
+                futurePuchased: false,
+                marketName: '',
+                productsList: [],
+                situationFlag: '',
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

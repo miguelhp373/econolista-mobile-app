@@ -28,8 +28,18 @@ class CustomTheme {
     splashColor: const Color(0xFF02ABA0),
     scaffoldBackgroundColor: const Color(0xFFF2F2F2),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFF333333)),
-      bodyMedium: TextStyle(color: Color(0xFF666666)),
+      bodyLarge: TextStyle(
+        color: Color(0xFF333333),
+        fontFamily: 'Capriola',
+      ),
+      bodyMedium: TextStyle(
+        color: Color(0xFF666666),
+        fontFamily: 'Capriola',
+      ),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      filled: true,
+      fillColor: Color(0xFFD9D9D9),
     ),
     errorColor: const Color(0xFFFF3333),
   );

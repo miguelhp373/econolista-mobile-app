@@ -4,11 +4,21 @@ import '../../auth/auth_user_controller/auth_user_controller.dart';
 import '../custom_bool_alert_dialog/custom_bool_alert_dialog.dart';
 
 class DrawerSidebar extends StatelessWidget {
-  const DrawerSidebar({super.key});
+  const DrawerSidebar({
+    super.key,
+    this.authUserPhoto,
+    this.authUserName,
+  });
+
+  final String? authUserPhoto;
+  final String? authUserName;
 
   @override
   Widget build(BuildContext context) {
     final isAuthUserController = AuthUserController();
+    final displayUserName =
+        authUserName!.length > 30 ? authUserName?.split(' ')[0] : authUserName;
+
     return SafeArea(
       child: Drawer(
         child: ListView(
@@ -21,13 +31,6 @@ class DrawerSidebar extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // const Text(
-                    //   'SixNet App',
-                    //   style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 25,
-                    //   ),
-                    // ),
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.only(right: 20.0),
@@ -36,18 +39,18 @@ class DrawerSidebar extends StatelessWidget {
                         radius: 30,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(30.0),
-                          child: '' != ''
-                              ? Image.network('')
+                          child: authUserPhoto != ''
+                              ? Image.network(authUserPhoto!)
                               : const Icon(Icons.person, size: 40),
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Padding(
-                      padding: EdgeInsets.only(right: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
                       child: Text(
-                        'User Name',
-                        style: TextStyle(
+                        displayUserName!,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                         ),

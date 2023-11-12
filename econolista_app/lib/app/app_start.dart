@@ -12,10 +12,14 @@ class AppStart extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.lightTheme.copyWith(
         textTheme: const TextTheme(
-          bodyLarge:
-              TextStyle(color: Color(0xFF333333)), // Cor de Texto Principal
-          bodyMedium:
-              TextStyle(color: Color(0xFF666666)), // Cor de Texto Secundária
+          bodyLarge: TextStyle(
+            color: Color(0xFF333333),
+            fontFamily: 'Capriola',
+          ), // Cor de Texto Principal
+          bodyMedium: TextStyle(
+            color: Color(0xFF666666),
+            fontFamily: 'Capriola',
+          ), // Cor de Texto Secundária
         ),
       ),
       home: AuthUserController().handleAuthState(),
