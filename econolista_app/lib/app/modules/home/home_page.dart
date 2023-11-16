@@ -61,13 +61,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           MaterialPageRoute(
             builder: (context) => PurchaseDetails(
               purchasedModels: PurchasedModels(
-                purchasedID: '',
-                description: '',
                 dateTimeCreated: DateTime.now(),
-                futurePuchased: false,
-                marketName: '',
                 productsList: [],
-                situationFlag: '',
               ),
             ),
           ),

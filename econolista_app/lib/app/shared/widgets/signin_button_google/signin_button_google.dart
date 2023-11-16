@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../auth/auth_user_controller/auth_user_controller.dart';
-import '../../custom_sizes/custom_sizes.dart';
+import '../../themes/custom_sizes/custom_sizes.dart';
 
 class SigninButtonGoogle extends StatelessWidget {
   const SigninButtonGoogle({super.key});

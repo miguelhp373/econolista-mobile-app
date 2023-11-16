@@ -1,42 +1,46 @@
 class PurchasedModels {
-  String purchasedID;
+  String purchasedId;
+  String userId;
   String description;
   DateTime dateTimeCreated;
   List<Map> productsList;
   String marketName;
-  String situationFlag;
+  String status;
   bool futurePuchased;
 
   PurchasedModels({
-    required this.purchasedID,
-    required this.description,
+    this.purchasedId = '',
+    this.userId = '',
+    this.description = '',
     required this.dateTimeCreated,
     required this.productsList,
-    required this.marketName,
-    required this.situationFlag,
-    required this.futurePuchased,
+    this.marketName = '',
+    this.status = 'Aberta',
+    this.futurePuchased = false,
   });
 
   factory PurchasedModels.fromJson(Map<String, dynamic> json) {
     return PurchasedModels(
-      purchasedID: json['purchasedID'],
+      purchasedId: json['purchasedID'],
+      userId: json['userId'],
       description: json['description'],
       dateTimeCreated: json['dateTimeCreated'],
       productsList: json['productsList'],
       marketName: json['marketName'],
-      situationFlag: json['situationFlag'],
+      status: json['situationFlag'],
       futurePuchased: json['futurePuchased'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'purchasedID': purchasedID,
+      'purchasedID': purchasedId,
+      'userId': userId,
       'description': description,
       'dateTimeCreated': dateTimeCreated,
       'productsList': productsList,
       'marketName': marketName,
-      'situationFlag': situationFlag,
+      'situationFlag': status,
       'futurePuchased': futurePuchased,
     };
   }

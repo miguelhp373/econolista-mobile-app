@@ -1,6 +1,6 @@
 import 'package:econolista_app/app/shared/auth/auth_user_controller/auth_user_controller.dart';
 import 'package:econolista_app/app/shared/routes/routes.dart';
-import 'package:econolista_app/app/shared/custom_theme/custom_theme.dart';
+import 'package:econolista_app/app/shared/themes/custom_theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class AppStart extends StatelessWidget {

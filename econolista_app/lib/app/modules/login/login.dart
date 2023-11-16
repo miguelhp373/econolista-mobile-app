@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/custom_sizes/custom_sizes.dart';
+import '../../shared/themes/custom_sizes/custom_sizes.dart';
 import '../../shared/widgets/signin_button_google/signin_button_google.dart';
 
 class Login extends StatelessWidget {

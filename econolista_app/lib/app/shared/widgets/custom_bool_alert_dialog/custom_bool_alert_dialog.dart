@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../custom_sizes/custom_sizes.dart';
+import '../../themes/custom_sizes/custom_sizes.dart';
 
 class CustomBoolAlertDialog {
   Future<bool?> showBooleanAlertDialog(
