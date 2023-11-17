@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^4.13.0
   google_sign_in: ^6.1.6
   date_time_picker: ^2.1.0
+  intl: ^0.18.1
   
   flutter:
     sdk: flutter

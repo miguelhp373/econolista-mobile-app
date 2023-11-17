@@ -150,7 +150,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const SizedBox();
                         } else if (snapshot.hasError) {
                           ScaffoldMessengeAlert().showMessageOnDisplayBottom(
                             context,

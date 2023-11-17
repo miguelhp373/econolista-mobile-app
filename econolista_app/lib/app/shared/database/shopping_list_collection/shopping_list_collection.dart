@@ -88,4 +88,16 @@ class ShoppingListCollection {
     }
     return false;
   }
+
+  Query<Object?> fetchShoppingList(String userId) {
+    final Query getAllShoppingsListFromCollection =
+        shoppingListCollectionReferenceList
+            .where(
+              'Status',
+              isEqualTo: 'Aberta',
+            )
+            .where('UserId', isEqualTo: userId);
+
+    return getAllShoppingsListFromCollection;
+  }
 }
