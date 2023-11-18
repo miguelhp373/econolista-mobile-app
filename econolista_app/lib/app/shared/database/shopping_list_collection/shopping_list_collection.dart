@@ -11,6 +11,8 @@ class ShoppingListCollection {
   CollectionReference shoppingListCollectionReferenceList =
       FirebaseFirestore.instance.collection('shopping_list_collection');
 
+  /////////////////////////////////////////////////////////////////////
+
   Future<Map<String, dynamic>> getStoreListForDropdownList(
     String userId,
   ) async {
@@ -55,7 +57,8 @@ class ShoppingListCollection {
     return dropdownItems;
   }
 
-  Future<bool> formSubmitShoppingList(PurchasedModels purchasedModels) async {
+  Future<List<Map<String, dynamic>>> formSubmitShoppingList(
+      PurchasedModels purchasedModels) async {
     try {
       if (!purchasedModels.purchasedId.isNotEmpty) {
         await shoppingListCollectionReferenceList.add({
@@ -67,7 +70,9 @@ class ShoppingListCollection {
           "Status": purchasedModels.status,
           "ProductsList": {},
         });
-        return true;
+        return [
+          {'status': true, 'message': 'Lista de Compras Criada Com Sucesso!'}
+        ];
       } else {
         await shoppingListCollectionReferenceList
             .doc(purchasedModels.purchasedId)
@@ -81,12 +86,19 @@ class ShoppingListCollection {
             "ProductsList": {},
           },
         );
+        return [
+          {'status': true, 'message': 'Lista de Compras Alterada Com Sucesso!'}
+        ];
       }
     } catch (e) {
       //print('Exception Error: ${e}');
-      return false;
+      return [
+        {
+          'status': false,
+          'message': 'Erro ao Tentar Executar Uma Operação, Tente Novamente!'
+        }
+      ];
     }
-    return false;
   }
 
   Query<Object?> fetchShoppingList(String userId) {
@@ -100,4 +112,23 @@ class ShoppingListCollection {
 
     return getAllShoppingsListFromCollection;
   }
+
+  Query<Object?> fetchProductsList(String userId, String shoppingId) {
+    final DocumentReference shoppingDocumentRef =
+        shoppingListCollectionReferenceList.doc(shoppingId);
+
+    final CollectionReference itemsCollectionRef =
+        shoppingDocumentRef.collection('shopping_list_collection');
+
+    return itemsCollectionRef;
+  }
+
+  DocumentReference<Object?> fetchProductList(String shoppingId) {
+    final DocumentReference shoppingDocumentRef =
+        shoppingListCollectionReferenceList.doc(shoppingId);
+
+    return shoppingDocumentRef;
+  }
+
+/////////////////////////////////////////////////////////////////////
 }

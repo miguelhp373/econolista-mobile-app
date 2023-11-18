@@ -1,5 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
+import 'package:econolista_app/app/modules/purchase_products_list/purchase_products_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
   String? _isMarketNameSelected;
   bool? _isFuturePurchase = false;
   String? _purchasedId;
+  bool? _hasShowProductsList = false;
 
   late Future<Map<String, dynamic>> isShoppingListCollection;
   late TextEditingController _descriptionTextInput;
@@ -35,16 +37,17 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
   void _submitForm(
       BuildContext context, PurchasedModels purchasedModels) async {
     if (_formKey.currentState!.validate()) {
-      final submitSuccess = await ShoppingListCollection()
+      final submitJsonResult = await ShoppingListCollection()
           .formSubmitShoppingList(purchasedModels);
 
-      if (submitSuccess == true) {
+      if (submitJsonResult[0]['status'] == true) {
         ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, 'Lista de Compras Criada Com Sucesso!');
-        Navigator.pop(context);
+            context, submitJsonResult[0]['message']);
+        _hasShowProductsList = true;
+        //Navigator.pop(context);
       } else {
         ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, 'Erro ao Tentar Criar Lista de Compras, Tente Novamente!');
+            context, submitJsonResult[0]['message']);
       }
     }
   }
@@ -54,6 +57,8 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
     super.initState();
 
     _purchasedId = widget.purchasedModels.purchasedId;
+
+    _hasShowProductsList = _purchasedId?.isNotEmpty;
 
     _descriptionTextInput =
         TextEditingController(text: widget.purchasedModels.description);
@@ -109,6 +114,10 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                     controller: _descriptionTextInput,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
+                      hintText: 'Insira a Descrição da Lista',
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                      ),
                       filled: true,
                       fillColor:
                           Theme.of(context).inputDecorationTheme.fillColor,
@@ -262,33 +271,113 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 8),
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 55,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                SizedBox(height: MediaQuery.of(context).size.height / 14),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.5,
+                        margin: const EdgeInsets.only(top: 30),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: 55,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: _purchasedId!.isEmpty
+                                ? const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.add),
+                                      SizedBox(width: 5),
+                                      Text('Criar Lista de Compras')
+                                    ],
+                                  )
+                                : const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.save),
+                                      SizedBox(width: 5),
+                                      Text('Salvar Alterações')
+                                    ],
+                                  ),
+                            onPressed: () => _submitForm(
+                              context,
+                              PurchasedModels(
+                                purchasedId: _purchasedId!,
+                                userId: _userAuthId!,
+                                description: _descriptionTextInput.text,
+                                dateTimeCreated: DateTime.parse(
+                                    _dateTimeCreatedTextInput.text),
+                                marketName: _isMarketNameSelected!,
+                                productsList: [],
+                                futurePuchased: _isFuturePurchase!,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      child: _purchasedId!.isEmpty
-                          ? const Text('Criar Lista de Compras')
-                          : const Text('Salvar Alterações'),
-                      onPressed: () => _submitForm(
-                        context,
-                        PurchasedModels(
-                          purchasedId: _purchasedId!,
-                          userId: _userAuthId!,
-                          description: _descriptionTextInput.text,
-                          dateTimeCreated:
-                              DateTime.parse(_dateTimeCreatedTextInput.text),
-                          marketName: _isMarketNameSelected!,
-                          productsList: [],
-                          futurePuchased: _isFuturePurchase!,
+                      const SizedBox(width: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 4,
+                        margin: const EdgeInsets.only(top: 30),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: 55,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: _hasShowProductsList == true
+                                ? () => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PurchaseProductsList(),
+                                      ),
+                                    )
+                                : null,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Icon(Icons.shopping_cart)],
+                            ),
+                          ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(top: 30),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 55,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors
+                              .red, // Adicione esta linha para definir a cor vermelha
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.check),
+                            SizedBox(width: 5),
+                            Text('Encerrar Lista de Compras')
+                          ],
+                        ),
+                        onPressed: () => {},
                       ),
                     ),
                   ),

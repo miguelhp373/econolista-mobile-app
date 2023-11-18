@@ -27,8 +27,8 @@ class MyShoppingLists extends StatelessWidget {
               if (streamSnapshot.data!.docs.isNotEmpty) {
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(), //scroll style
-                  itemCount: streamSnapshot.data!.docs.length, //rows number
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final DocumentSnapshot documentSnapshot =
                         streamSnapshot.data!.docs[index];
