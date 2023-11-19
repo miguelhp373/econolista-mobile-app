@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:econolista_app/app/shared/models/product_models.dart';
 import 'package:econolista_app/app/shared/models/purchased_models.dart';
 import 'package:flutter/material.dart';
 
@@ -128,6 +131,101 @@ class ShoppingListCollection {
         shoppingListCollectionReferenceList.doc(shoppingId);
 
     return shoppingDocumentRef;
+  }
+
+  Future<String> calculateShoppingListTotal(String shoppingId) async {
+    double totalShoppingPriceValue = 0.0;
+
+    DocumentSnapshot documentSnapshot =
+        await ShoppingListCollection().fetchProductList(shoppingId).get();
+
+    Map<String, dynamic>? productListData =
+        documentSnapshot.data() as Map<String, dynamic>?;
+
+    if (productListData != null) {
+      dynamic productList = productListData['ProductsList'];
+
+      Map<String, dynamic> jsonDecodeProductsList = {};
+
+      if (productList is Map<String, dynamic>) {
+        productList.forEach((key, product) {
+          if (product != null && product is Map<String, dynamic>) {
+            jsonDecodeProductsList[key] = product;
+          }
+        });
+      }
+
+      jsonDecodeProductsList.forEach((chave, produto) {
+        if (produto.containsKey('productPrice') &&
+            produto['productPrice'] is num) {
+          double precoDoProduto = produto['productPrice'];
+          totalShoppingPriceValue += precoDoProduto;
+        }
+      });
+    }
+    return totalShoppingPriceValue.toStringAsFixed(2);
+  }
+
+  Future<List<Map<String, dynamic>>> formSubmitProductsList(
+      ProductModels productModels, String shoppingId) async {
+    try {
+      await _updateProductInList(
+          productModels, shoppingId, productModels.productId);
+      return [
+        {'status': true, 'message': 'Produto Alterado Com Sucesso'}
+      ];
+    } catch (e) {
+      return [
+        {
+          'status': false,
+          'message': 'Erro ao Tentar Executar Uma Operação, Tente Novamente!'
+        }
+      ];
+    }
+  }
+
+  Future<void> _updateProductInList(
+    ProductModels updatedProduct,
+    String shoppingId,
+    String productIndex,
+  ) async {
+    // Obter a referência do documento
+    DocumentReference documentReference =
+        ShoppingListCollection().fetchProductList(shoppingId);
+
+    // Obter os dados atuais do documento
+    DocumentSnapshot documentSnapshot = await documentReference.get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic>? productListData =
+          documentSnapshot.data() as Map<String, dynamic>?;
+
+      if (productListData != null) {
+        // Obter a lista de produtos
+        Map<String, dynamic> productList =
+            Map<String, dynamic>.from(productListData['ProductsList'] ?? {});
+
+        // Verificar se o índice é válido
+        int? parsedIndex = int.tryParse(productIndex);
+
+        if (parsedIndex != null && parsedIndex >= 0) {
+          // Atualizar o produto no índice especificado
+          productList[productIndex] = {
+            ...updatedProduct.toMap(),
+            'id': productIndex,
+          };
+        } else {
+          // Adicionar um novo produto com um ID baseado no índice
+          int newIndex = productList.length;
+          productList[newIndex.toString()] = {
+            ...updatedProduct.toMap(),
+            'id': newIndex.toString(),
+          };
+        }
+
+        // Atualizar os dados no Firestore
+        await documentReference.update({'ProductsList': productList});
+      }
+    }
   }
 
 /////////////////////////////////////////////////////////////////////

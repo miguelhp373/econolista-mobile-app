@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:econolista_app/app/modules/purchase_product_details/purchase_product_details.dart';
+import 'package:econolista_app/app/shared/models/product_models.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/database/shopping_list_collection/shopping_list_collection.dart';
@@ -41,6 +43,7 @@ class _PurchaseProductsListviewState extends State<PurchaseProductsListview> {
 
     if (productListData != null) {
       dynamic productList = productListData['ProductsList'];
+
       if (productList is Map<String, dynamic>) {
         _processAndAddToStream(productList);
       }
@@ -57,7 +60,7 @@ class _PurchaseProductsListviewState extends State<PurchaseProductsListview> {
     _productListController.add(convertedProductList);
   }
 
-  Widget _buildProductTile(Map<String, dynamic> product) {
+  Widget _buildProductTile(Map<String, dynamic> product, String productIndex) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -69,7 +72,7 @@ class _PurchaseProductsListviewState extends State<PurchaseProductsListview> {
                 25,
               ),
               child: Image.network(
-                product['ProductUrlPhoto'],
+                product['productPhotoUrl'],
                 width: 50,
                 height: 50,
               ),
@@ -78,19 +81,35 @@ class _PurchaseProductsListviewState extends State<PurchaseProductsListview> {
         ),
         tileColor: const Color(0xFFced7db),
         title: Text(
-          product['ProductName'],
+          product['productName'],
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
         ),
         subtitle: Text(
-          'R\$ ${product['ProductPrice'].toStringAsFixed(2)}',
+          'R\$ ${product['productPrice'].toStringAsFixed(2)}',
         ),
         trailing: IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: () => {},
         ),
-        onTap: () => {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PurchaseProductDetails(
+              productModels: ProductModels(
+                productId: productIndex,
+                productName: product['productName'] ?? '',
+                productDescription: product['productDescription'] ?? '',
+                productPhotoUrl: product['productPhotoUrl'] ?? '',
+                productBarcode: product['productBarcode'] ?? '',
+                productPrice: (product['productPrice'] ?? 0).toDouble(),
+                productQuantity: product['productQuantity'] ?? 0,
+              ),
+              shoppingId: widget.shoppingId,
+            ),
+          ),
+        ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
@@ -120,7 +139,7 @@ class _PurchaseProductsListviewState extends State<PurchaseProductsListview> {
                     itemBuilder: (context, index) {
                       Map<String, dynamic> product =
                           productList[index.toString()];
-                      return _buildProductTile(product);
+                      return _buildProductTile(product, index.toString());
                     },
                   );
                 } else {

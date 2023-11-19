@@ -339,7 +339,9 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const PurchaseProductsList(),
+                                            PurchaseProductsList(
+                                          shoppingId: _purchasedId,
+                                        ),
                                       ),
                                     )
                                 : null,
