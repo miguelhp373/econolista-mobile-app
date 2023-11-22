@@ -156,13 +156,20 @@ class ShoppingListCollection {
       }
 
       jsonDecodeProductsList.forEach((chave, produto) {
-        if (produto.containsKey('productPrice') &&
-            produto['productPrice'] is num) {
-          double precoDoProduto = produto['productPrice'];
-          totalShoppingPriceValue += precoDoProduto;
+        if (produto.containsKey('productPrice')) {
+          dynamic productPrice = produto['productPrice'];
+
+          if (productPrice is String) {
+            double precoDoProduto = double.parse(productPrice);
+            totalShoppingPriceValue += precoDoProduto;
+          } else if (productPrice is int) {
+            double precoDoProduto = double.parse(productPrice.toString());
+            totalShoppingPriceValue += precoDoProduto;
+          }
         }
       });
     }
+
     return totalShoppingPriceValue.toStringAsFixed(2);
   }
 
@@ -226,6 +233,73 @@ class ShoppingListCollection {
         await documentReference.update({'ProductsList': productList});
       }
     }
+  }
+
+  Future<List<Map<String, dynamic>>> deleteProductFromList(
+    String shoppingId,
+    String productIndex,
+  ) async {
+    try {
+      // Obter a referência do documento
+      DocumentReference documentReference =
+          ShoppingListCollection().fetchProductList(shoppingId);
+
+      // Obter os dados atuais do documento
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? productListData =
+            documentSnapshot.data() as Map<String, dynamic>?;
+
+        if (productListData != null) {
+          // Obter a lista de produtos
+          Map<String, dynamic> productList =
+              Map<String, dynamic>.from(productListData['ProductsList'] ?? {});
+
+          // Verificar se o índice é válido
+          int? parsedIndex = int.tryParse(productIndex);
+
+          if (parsedIndex != null && parsedIndex >= 0) {
+            // Remover o produto no índice especificado
+            productList.remove(productIndex);
+
+            // Reorganizar os índices
+            productList = reorganizeProductListIndexes(productList);
+
+            // Atualizar os dados no Firestore
+            await documentReference.update({'ProductsList': productList});
+          }
+        }
+      }
+      return [
+        {
+          'status': true,
+          'message': 'Produto Excluído Com Sucesso',
+        }
+      ];
+    } catch (e) {
+      return [
+        {
+          'status': false,
+          'message': 'Erro Ao Tentar Excluir o Produto, Tente Novamente!',
+        }
+      ];
+    }
+  }
+
+  Map<String, dynamic> reorganizeProductListIndexes(
+      Map<String, dynamic> productList) {
+    // Converter chaves para inteiros e ordenar
+    List<int> indexes = productList.keys.map((key) => int.parse(key)).toList();
+    indexes.sort();
+
+    // Criar um novo mapa com índices reorganizados
+    Map<String, dynamic> newProductList = {};
+    for (int i = 0; i < indexes.length; i++) {
+      String oldKey = indexes[i].toString();
+      newProductList[i.toString()] = productList[oldKey];
+    }
+
+    return newProductList;
   }
 
 /////////////////////////////////////////////////////////////////////

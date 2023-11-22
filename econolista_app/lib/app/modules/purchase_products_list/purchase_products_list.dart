@@ -29,6 +29,7 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
           .calculateShoppingListTotal(widget.shoppingId);
       setState(() => isTotalShoppingList = shoppingTotalPriceResult);
     } catch (e) {
+      //print(e);
       ScaffoldMessengeAlert().showMessageOnDisplayBottom(
           context, 'Erro Ao Atualizar Valor Total da Compra!');
     }

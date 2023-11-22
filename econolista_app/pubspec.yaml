@@ -69,8 +69,11 @@ flutter:
   assets:
     - assets/icons/google_icon.png
     - assets/logo/brading_logo.png
-    - assets/logo/branding_banner.png    
-  
+    - assets/logo/branding_banner.png
+    - assets/lottiefiles/animation_loading_chicken.gif
+    - assets/lottiefiles/animation_loading.gif
+    - assets/lottiefiles/animation_no_data.gif
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
