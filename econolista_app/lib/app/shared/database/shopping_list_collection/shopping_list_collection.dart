@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:econolista_app/app/shared/models/product_models.dart';
 import 'package:econolista_app/app/shared/models/purchased_models.dart';
@@ -162,7 +160,7 @@ class ShoppingListCollection {
           if (productPrice is String) {
             double precoDoProduto = double.parse(productPrice);
             totalShoppingPriceValue += precoDoProduto;
-          } else if (productPrice is int) {
+          } else if (productPrice is double || productPrice is int) {
             double precoDoProduto = double.parse(productPrice.toString());
             totalShoppingPriceValue += precoDoProduto;
           }

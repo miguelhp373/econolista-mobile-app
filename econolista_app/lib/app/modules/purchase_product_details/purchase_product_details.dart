@@ -4,7 +4,6 @@ import 'package:econolista_app/app/shared/models/product_models.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/database/shopping_list_collection/shopping_list_collection.dart';
-import '../../shared/widgets/scaffold_message_alert/scaffold_message_alert.dart';
 
 class PurchaseProductDetails extends StatefulWidget {
   const PurchaseProductDetails(
@@ -29,7 +28,7 @@ class _PurchaseProductDetailsState extends State<PurchaseProductDetails> {
     _productQuantityController = TextEditingController(
         text: widget.productModels.productQuantity.toString());
     _productPriceController = TextEditingController(
-        text: widget.productModels.productPrice.toString());
+        text: widget.productModels.productPrice.toStringAsFixed(2));
   }
 
   void _submitForm(BuildContext context, ProductModels productModels) async {
@@ -38,13 +37,23 @@ class _PurchaseProductDetailsState extends State<PurchaseProductDetails> {
           .formSubmitProductsList(productModels, widget.shoppingId);
 
       if (submitJsonResult[0]['status'] == true) {
-        ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, submitJsonResult[0]['message']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              submitJsonResult[0]['message'],
+            ),
+          ),
+        );
 
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       } else {
-        ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, submitJsonResult[0]['message']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              submitJsonResult[0]['message'],
+            ),
+          ),
+        );
       }
     }
   }

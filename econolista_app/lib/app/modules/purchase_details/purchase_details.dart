@@ -41,13 +41,23 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
           .formSubmitShoppingList(purchasedModels);
 
       if (submitJsonResult[0]['status'] == true) {
-        ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, submitJsonResult[0]['message']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              submitJsonResult[0]['message'],
+            ),
+          ),
+        );
         _hasShowProductsList = true;
         //Navigator.pop(context);
       } else {
-        ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-            context, submitJsonResult[0]['message']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              submitJsonResult[0]['message'],
+            ),
+          ),
+        );
       }
     }
   }
@@ -161,9 +171,12 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                             ConnectionState.waiting) {
                           return const SizedBox();
                         } else if (snapshot.hasError) {
-                          ScaffoldMessengeAlert().showMessageOnDisplayBottom(
-                            context,
-                            'Erro ao Carregar a Lista de Supermercados',
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Erro ao Carregar a Lista de Supermercados',
+                              ),
+                            ),
                           );
                           return const SizedBox();
                         } else {
@@ -323,7 +336,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                       ),
                       const SizedBox(width: 10),
                       Container(
-                        width: MediaQuery.of(context).size.width / 4,
+                        width: MediaQuery.of(context).size.width / 4.5,
                         margin: const EdgeInsets.only(top: 30),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -335,7 +348,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                               ),
                             ),
                             onPressed: _hasShowProductsList == true
-                                ? () => Navigator.pushReplacement(
+                                ? () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>

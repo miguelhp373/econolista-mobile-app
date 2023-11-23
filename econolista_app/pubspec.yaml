@@ -1,5 +1,5 @@
 name: econolista_app
-description: A new Flutter project.
+description: O Econolista é a solução mobile ideal para organizar suas compras e otimizar sua economia. Desenvolvido para substituir as tradicionais calculadoras, o aplicativo permite escanear produtos, inserir preços e quantidades, calculando automaticamente os gastos. Simplifique a organização financeira, tenha controle total das suas compras na palma da mão.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -34,6 +34,8 @@ dependencies:
   google_sign_in: ^6.1.6
   date_time_picker: ^2.1.0
   intl: ^0.17.0
+  http: ^1.1.0
+  flutter_barcode_scanner: ^2.0.0
   
   flutter:
     sdk: flutter

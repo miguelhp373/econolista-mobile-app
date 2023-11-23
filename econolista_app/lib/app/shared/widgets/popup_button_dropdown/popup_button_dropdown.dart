@@ -33,7 +33,38 @@ class PopupButtonDropdown extends StatelessWidget {
         PopupMenuItem<String>(
           value: 'Excluir',
           child: ListTile(
-            onTap: () => deletingSelectedRegister(),
+            onTap: () => {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      'Confirmação',
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                    content: Text('Tem certeza de que deseja excluir?',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color,
+                        )),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('Não'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          deletingSelectedRegister();
+                          Navigator.of(context).pop(true);
+                        },
+                        child: const Text('Sim'),
+                      ),
+                    ],
+                  );
+                },
+              )
+            },
             leading: const Icon(Icons.delete),
             title: Text(
               'Excluir',

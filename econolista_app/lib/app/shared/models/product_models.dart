@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ProductModels {
   String productId;
   String productName;
@@ -8,6 +6,7 @@ class ProductModels {
   double productPrice;
   int productQuantity;
   String productPhotoUrl;
+  String apiStatusCode;
 
   ProductModels({
     this.productId = '',
@@ -17,6 +16,7 @@ class ProductModels {
     this.productPrice = 0.0,
     this.productQuantity = 0,
     this.productPhotoUrl = '',
+    this.apiStatusCode = '',
   });
 
   ProductModels copyWith({
@@ -27,6 +27,7 @@ class ProductModels {
     double? productPrice,
     int? productQuantity,
     String? productPhotoUrl,
+    String? apiStatusCode,
   }) {
     return ProductModels(
       productId: productId ?? this.productId,
@@ -36,6 +37,7 @@ class ProductModels {
       productPrice: productPrice ?? this.productPrice,
       productQuantity: productQuantity ?? this.productQuantity,
       productPhotoUrl: productPhotoUrl ?? this.productPhotoUrl,
+      apiStatusCode: apiStatusCode ?? this.apiStatusCode,
     );
   }
 
@@ -51,22 +53,18 @@ class ProductModels {
     };
   }
 
-  factory ProductModels.fromMap(Map<String, dynamic> map) {
+  factory ProductModels.fromJson(Map<String, dynamic> json) {
     return ProductModels(
-      productId: map['productId'] ?? '',
-      productName: map['productName'] ?? '',
-      productDescription: map['productDescription'] ?? '',
-      productBarcode: map['productBarcode'] ?? '',
-      productPrice: map['productPrice']?.toDouble() ?? 0.0,
-      productQuantity: map['productQuantity']?.toInt() ?? 0,
-      productPhotoUrl: map['productPhotoUrl'] ?? '',
+      productId: '',
+      productName: json['description'] ?? '',
+      productDescription: json['description'] ?? '',
+      productPhotoUrl: json['thumbnail'] ?? '',
+      productBarcode: json['gtin'].toString(),
+      productPrice: json['avg_price'] ?? 0,
+      productQuantity: 1,
+      apiStatusCode: '200',
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ProductModels.fromJson(String source) =>
-      ProductModels.fromMap(json.decode(source));
 
   @override
   String toString() {
