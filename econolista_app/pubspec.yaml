@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.17.0
   http: ^1.1.0
   flutter_barcode_scanner: ^2.0.0
+  flutter_native_splash: ^2.3.6
   
   flutter:
     sdk: flutter
@@ -55,6 +56,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_native_splash:
+  color: '#02AB72'
+  image: assets/logo/brading_logo.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

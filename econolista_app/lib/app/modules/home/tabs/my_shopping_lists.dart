@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_key_in_widget_constructors
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_key_in_widget_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:econolista_app/app/shared/database/shopping_list_collection/shopping_list_collection.dart';
@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/models/purchased_models.dart';
+import '../../../shared/widgets/popup_button_dropdown/popup_button_dropdown.dart';
 import '../../purchase_details/purchase_details.dart';
 
 class MyShoppingLists extends StatelessWidget {
@@ -20,7 +21,8 @@ class MyShoppingLists extends StatelessWidget {
       child: SingleChildScrollView(
         child: StreamBuilder(
           stream: ShoppingListCollection()
-              .fetchShoppingList(FirebaseAuth.instance.currentUser!.uid)
+              .fetchShoppingList(
+                  FirebaseAuth.instance.currentUser!.uid, 'Aberta')
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
@@ -57,9 +59,44 @@ class MyShoppingLists extends StatelessWidget {
                                   .toString()
                                   .substring(0, 14),
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.more_vert),
-                          onPressed: () => {},
+                        trailing: PopupButtonDropdown(
+                          editingSelectedRegister: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PurchaseDetails(
+                                purchasedModels: PurchasedModels(
+                                  description: documentSnapshot['Description'],
+                                  dateTimeCreated:
+                                      documentSnapshot['DateTimeCreated']
+                                          .toDate(),
+                                  marketName: documentSnapshot['MarketName'],
+                                  futurePuchased:
+                                      documentSnapshot['ScheduledPurchase'],
+                                  purchasedId: documentSnapshot.id,
+                                  status: documentSnapshot['Status'],
+                                  productsList: [],
+                                ),
+                              ),
+                            ),
+                          ),
+                          deletingSelectedRegister: () async {
+                            final deletingAction =
+                                await ShoppingListCollection()
+                                    .deleteShoppingList(documentSnapshot.id);
+
+                            try {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    deletingAction[0]['message'],
+                                  ),
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              ///
+                            }
+                          },
                         ),
                         onTap: () => Navigator.push(
                           context,
@@ -93,11 +130,22 @@ class MyShoppingLists extends StatelessWidget {
                   },
                 );
               } else {
-                return Center(
-                  child: Text('Não Há Dados Para Demonstrar',
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                      )),
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.shopping_cart_outlined, size: 30),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Não Há Lista de Compras em Andamento',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 16,
+                        ),
+                      )
+                    ],
+                  ),
                 );
               }
             }

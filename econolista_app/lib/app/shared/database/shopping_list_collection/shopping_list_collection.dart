@@ -62,7 +62,8 @@ class ShoppingListCollection {
       PurchasedModels purchasedModels) async {
     try {
       if (!purchasedModels.purchasedId.isNotEmpty) {
-        await shoppingListCollectionReferenceList.add({
+        DocumentReference documentReference =
+            await shoppingListCollectionReferenceList.add({
           "UserId": purchasedModels.userId,
           "Description": purchasedModels.description,
           "DateTimeCreated": purchasedModels.dateTimeCreated,
@@ -72,7 +73,12 @@ class ShoppingListCollection {
           "ProductsList": {},
         });
         return [
-          {'status': true, 'message': 'Lista de Compras Criada Com Sucesso!'}
+          {
+            'status': true,
+            'type': 'create',
+            'shoppingID': documentReference.id,
+            'message': 'Lista de Compras Criada Com Sucesso!'
+          }
         ];
       } else {
         await shoppingListCollectionReferenceList
@@ -88,7 +94,11 @@ class ShoppingListCollection {
           },
         );
         return [
-          {'status': true, 'message': 'Lista de Compras Alterada Com Sucesso!'}
+          {
+            'status': true,
+            'type': 'update',
+            'message': 'Lista de Compras Alterada Com Sucesso!'
+          }
         ];
       }
     } catch (e) {
@@ -96,18 +106,19 @@ class ShoppingListCollection {
       return [
         {
           'status': false,
+          'type': 'error',
           'message': 'Erro ao Tentar Executar Uma Operação, Tente Novamente!'
         }
       ];
     }
   }
 
-  Query<Object?> fetchShoppingList(String userId) {
+  Query<Object?> fetchShoppingList(String userId, String status) {
     final Query getAllShoppingsListFromCollection =
         shoppingListCollectionReferenceList
             .where(
               'Status',
-              isEqualTo: 'Aberta',
+              isEqualTo: status,
             )
             .where('UserId', isEqualTo: userId);
 
@@ -156,13 +167,17 @@ class ShoppingListCollection {
       jsonDecodeProductsList.forEach((chave, produto) {
         if (produto.containsKey('productPrice')) {
           dynamic productPrice = produto['productPrice'];
+          dynamic productQuantity = produto['productQuantity'];
 
           if (productPrice is String) {
             double precoDoProduto = double.parse(productPrice);
-            totalShoppingPriceValue += precoDoProduto;
+            int quantidadeDoProduto = int.parse(productQuantity);
+
+            totalShoppingPriceValue += precoDoProduto * quantidadeDoProduto;
           } else if (productPrice is double || productPrice is int) {
             double precoDoProduto = double.parse(productPrice.toString());
-            totalShoppingPriceValue += precoDoProduto;
+            int quantidadeDoProduto = int.parse(productQuantity.toString());
+            totalShoppingPriceValue += precoDoProduto * quantidadeDoProduto;
           }
         }
       });
@@ -300,5 +315,40 @@ class ShoppingListCollection {
     return newProductList;
   }
 
+  Future<void> updateStatusShoppingList(
+    String shoppingId,
+    String status,
+  ) async {
+    DocumentReference documentReference =
+        ShoppingListCollection().fetchProductList(shoppingId);
+
+    await documentReference.update({
+      'Status': status,
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> deleteShoppingList(
+      String shoppingId) async {
+    try {
+      final DocumentReference shoppingDocumentRef =
+          shoppingListCollectionReferenceList.doc(shoppingId);
+
+      await shoppingDocumentRef.delete();
+      return [
+        {
+          'status': true,
+          'message': 'Lista de Compras Excluída Com Sucesso',
+        }
+      ];
+    } catch (e) {
+      return [
+        {
+          'status': false,
+          'message':
+              'Erro Ao Tentar Excluir Lista de Compras, Tente Novamente!',
+        }
+      ];
+    }
+  }
 /////////////////////////////////////////////////////////////////////
 }

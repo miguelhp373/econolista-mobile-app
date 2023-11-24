@@ -10,8 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../../shared/models/product_models.dart';
+import '../../shared/widgets/custom_bool_alert_dialog/custom_bool_alert_dialog.dart';
 import '../../shared/widgets/popup_button_dropdown/popup_button_dropdown.dart';
-import '../../shared/widgets/top_title_page/top_title_page.dart';
 import '../../shared/database/shopping_list_collection/shopping_list_collection.dart';
 import '../..//shared/api/fetch_api_bluesoft_cosmos/fetch_api_bluesoft_cosmos.dart';
 
@@ -27,31 +27,12 @@ class PurchaseProductsList extends StatefulWidget {
 }
 
 class _PurchaseProductsListState extends State<PurchaseProductsList> {
-  late StreamController<Map<String, dynamic>> _productListController;
   ///////////////////////////////////////////////////
-  String _scanBarcode = 'Unknown';
-  String isTotalShoppingList = '0.00';
+  late StreamController<Map<String, dynamic>> _productListController;
 
-  void getTotalShoppingPriceValue(BuildContext context) async {
-    try {
-      String shoppingTotalPriceResult = await ShoppingListCollection()
-          .calculateShoppingListTotal(widget.shoppingId);
-      setState(() => isTotalShoppingList = shoppingTotalPriceResult);
-    } catch (e) {
-      //print(e);
-      try {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Erro Ao Atualizar Valor Total da Compra!',
-            ),
-          ),
-        );
-      } catch (e) {
-        //
-      }
-    }
-  }
+  String _scanBarcode = 'Desconhecido';
+  String isTotalShoppingList = '0,00';
+  int isTotalItens = 0;
 
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
@@ -77,11 +58,11 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
         });
       }
     } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+      barcodeScanRes = 'Falha ao obter a versão da plataforma.';
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Erro, Não Foi Possivel Abrir o Leitor de Código de Barras!',
+            'Erro, Não Foi Possível Abrir o Leitor de Código de Barras!',
           ),
         ),
       );
@@ -119,7 +100,33 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
     _productListController.add(convertedProductList);
   }
 
+  void getTotalShoppingPriceValue(BuildContext context) async {
+    try {
+      String shoppingTotalPriceResult = await ShoppingListCollection()
+          .calculateShoppingListTotal(widget.shoppingId);
+      setState(() => isTotalShoppingList = shoppingTotalPriceResult);
+    } catch (e) {
+      //print(e);
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Erro Ao Atualizar Valor Total da Compra!',
+            ),
+          ),
+        );
+      } catch (e) {
+        //
+      }
+    }
+  }
+
+  void getTotalItensList(int listProductsLength) {
+    setState(() => isTotalItens = listProductsLength);
+  }
+
   /////////////////////////////////////////////////////////////////////
+
   showDetailsProductFromCart(ProductModels productModelsInstance) {
     Navigator.push(
       context,
@@ -147,6 +154,26 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
     getProductsList();
   }
 
+  finishedShopping(BuildContext contextScreen) {
+    CustomBoolAlertDialog()
+        .showBooleanAlertDialog(
+      context,
+      'Encerrar Lista de Compras',
+      'Deseja Encerrar o Carrinho de Compras Atual?',
+    )
+        .then(
+      (confirmed) async {
+        if (confirmed!) {
+          await ShoppingListCollection()
+              .updateStatusShoppingList(widget.shoppingId, 'Encerrada');
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
+
+  /////////////////////////////////////////////////////////////////////
+
   Future<void> _refreshData(BuildContext context) async {
     getProductsList();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -158,6 +185,8 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
     );
   }
 
+  /////////////////////////////////////////////////////////////////////
+
   @override
   void initState() {
     super.initState();
@@ -165,170 +194,200 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
     getProductsList();
   }
 
-  Widget _buildProductTile(Map<String, dynamic> product, String productIndex) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(
-                25,
-              ),
-              child: product['productPhotoUrl'] != null &&
-                      product['productPhotoUrl'] != ''
-                  ? Image.network(
-                      product['productPhotoUrl'],
-                      width: 50,
-                      height: 50,
-                    )
-                  : const SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.question_mark),
-                    ),
-            ),
-          ],
-        ),
-        tileColor: const Color(0xFFced7db),
-        title: Text(
-          product['productName'],
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
-        ),
-        subtitle: Text(
-          'R\$ ${product['productPrice'].toStringAsFixed(2)}',
-        ),
-        trailing: PopupButtonDropdown(
-          editingSelectedRegister: () {
-            Future.microtask(() {
-              showDetailsProductFromCart(
-                ProductModels(
-                  productId: productIndex,
-                  productName: product['productName'] ?? '',
-                  productDescription: product['productDescription'] ?? '',
-                  productPhotoUrl: product['productPhotoUrl'] ?? '',
-                  productBarcode: product['productBarcode'] ?? '',
-                  productPrice: (product['productPrice'] ?? 0).toDouble(),
-                  productQuantity: product['productQuantity'] ?? 0,
-                ),
-              );
-            });
-          },
-          deletingSelectedRegister: () {
-            Future.microtask(() {
-              deleteProductFromCart(widget.shoppingId, productIndex);
-            });
-          },
-        ),
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PurchaseProductDetails(
-                productModels: ProductModels(
-                  productId: productIndex,
-                  productName: product['productName'] ?? '',
-                  productDescription: product['productDescription'] ?? '',
-                  productPhotoUrl: product['productPhotoUrl'] ?? '',
-                  productBarcode: product['productBarcode'] ?? '',
-                  productPrice: (product['productPrice'] ?? 0).toDouble(),
-                  productQuantity: product['productQuantity'] ?? 0,
-                ),
-                shoppingId: widget.shoppingId,
-              ),
-            ),
-          ).then((value) => getProductsList());
-        },
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     getTotalShoppingPriceValue(context);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Carrinho de Compras'),
+        centerTitle: true,
+      ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            const TopTitlePage(
-              titleIcon: Icons.shopping_cart,
-              titleText: 'Carrinho de Compras',
-            ),
             SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: RefreshIndicator(
-                  onRefresh: () => _refreshData(context),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 1.4,
-                    child: SingleChildScrollView(
-                      child: StreamBuilder<Map<String, dynamic>>(
-                        stream: _productListController.stream,
-                        builder: (context,
-                            AsyncSnapshot<Map<String, dynamic>>
-                                streamSnapshot) {
-                          if (streamSnapshot.hasData) {
-                            Map<String, dynamic> productList =
-                                streamSnapshot.data!;
-                            if (productList.isNotEmpty) {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: productList.length,
-                                itemBuilder: (context, index) {
-                                  Map<String, dynamic> product =
-                                      productList[index.toString()];
-                                  return _buildProductTile(
-                                      product, index.toString());
-                                },
-                              );
-                            } else {
-                              return SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 1.5,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        height: 150,
-                                        width: 150,
-                                        child: Image(
-                                          image: AssetImage(
-                                              'assets/lottiefiles/animation_no_data.gif'),
+              child: RefreshIndicator(
+                onRefresh: () => _refreshData(context),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: SingleChildScrollView(
+                    child: StreamBuilder<Map<String, dynamic>>(
+                      stream: _productListController.stream,
+                      builder: (
+                        context,
+                        AsyncSnapshot<Map<String, dynamic>> streamSnapshot,
+                      ) {
+                        if (streamSnapshot.hasData) {
+                          Map<String, dynamic> productList =
+                              streamSnapshot.data!;
+                          if (productList.isNotEmpty) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: productList.length,
+                              itemBuilder: (context, index) {
+                                Map<String, dynamic> product =
+                                    productList[index.toString()];
+
+                                Future.microtask(() =>
+                                    getTotalItensList(productList.length));
+
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                    leading: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                          child: product['productPhotoUrl'] !=
+                                                      null &&
+                                                  product['productPhotoUrl'] !=
+                                                      ''
+                                              ? Image.network(
+                                                  product['productPhotoUrl'],
+                                                  width: 50,
+                                                  height: 50,
+                                                )
+                                              : const SizedBox(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child:
+                                                      Icon(Icons.question_mark),
+                                                ),
                                         ),
+                                      ],
+                                    ),
+                                    tileColor: const Color(0xFFced7db),
+                                    title: Text(
+                                      product['productName'],
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .color,
                                       ),
-                                      Text(
-                                        'Não Há Dados Para Demonstrar',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .color,
-                                          fontSize: 17,
+                                    ),
+                                    subtitle: Text(
+                                      'R\$ ${product['productPrice'].toStringAsFixed(2)} | Quantidade x${product['productQuantity']}',
+                                    ),
+                                    trailing: PopupButtonDropdown(
+                                      editingSelectedRegister: () {
+                                        Future.microtask(() {
+                                          showDetailsProductFromCart(
+                                            ProductModels(
+                                              productId: index.toString(),
+                                              productName:
+                                                  product['productName'] ?? '',
+                                              productDescription: product[
+                                                      'productDescription'] ??
+                                                  '',
+                                              productPhotoUrl:
+                                                  product['productPhotoUrl'] ??
+                                                      '',
+                                              productBarcode:
+                                                  product['productBarcode'] ??
+                                                      '',
+                                              productPrice:
+                                                  (product['productPrice'] ?? 0)
+                                                      .toDouble(),
+                                              productQuantity:
+                                                  product['productQuantity'] ??
+                                                      0,
+                                            ),
+                                          );
+                                        });
+                                      },
+                                      deletingSelectedRegister: () {
+                                        Future.microtask(() {
+                                          deleteProductFromCart(
+                                              widget.shoppingId,
+                                              index.toString());
+                                        });
+                                      },
+                                    ),
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PurchaseProductDetails(
+                                            productModels: ProductModels(
+                                              productId: index.toString(),
+                                              productName:
+                                                  product['productName'] ?? '',
+                                              productDescription: product[
+                                                      'productDescription'] ??
+                                                  '',
+                                              productPhotoUrl:
+                                                  product['productPhotoUrl'] ??
+                                                      '',
+                                              productBarcode:
+                                                  product['productBarcode'] ??
+                                                      '',
+                                              productPrice:
+                                                  (product['productPrice'] ?? 0)
+                                                      .toDouble(),
+                                              productQuantity:
+                                                  product['productQuantity'] ??
+                                                      0,
+                                            ),
+                                            shoppingId: widget.shoppingId,
+                                          ),
                                         ),
-                                      )
-                                    ],
+                                      ).then((value) => getProductsList());
+                                    },
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
                                   ),
+                                );
+                              },
+                            );
+                          } else {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 150,
+                                      width: 150,
+                                      child: Image(
+                                        image: AssetImage(
+                                            'assets/lottiefiles/animation_no_data.gif'),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Não Há Dados Para Demonstrar',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color,
+                                        fontSize: 17,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              );
-                            }
+                              ),
+                            );
                           }
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: const Center(
-                              child: SizedBox(
+                        }
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
                                 height: 150,
                                 width: 150,
                                 child: Image(
@@ -337,10 +396,18 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                              Text('Carregando Dados . . . ',
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color,
+                                    fontSize: 17,
+                                  )),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -361,6 +428,14 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
           children: [
             Text(
               'Total: R\$ ${isTotalShoppingList.replaceAll('.', ',')}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Total Itens: $isTotalItens',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,

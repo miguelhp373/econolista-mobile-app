@@ -63,7 +63,7 @@ class PopupButtonDropdown extends StatelessWidget {
                     ],
                   );
                 },
-              )
+              ),
             },
             leading: const Icon(Icons.delete),
             title: Text(

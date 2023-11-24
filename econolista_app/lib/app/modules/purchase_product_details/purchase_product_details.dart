@@ -79,14 +79,22 @@ class _PurchaseProductDetailsState extends State<PurchaseProductDetails> {
                           widget.productModels.productPhotoUrl,
                         )
                       : const SizedBox(
-                          child: Center(
-                            child: Text(
-                              'Erro Ao Carregar a Imagem!',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.photo,
+                                size: 40,
                               ),
-                            ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Imagem do Produto Não Encontrada!',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                 ),

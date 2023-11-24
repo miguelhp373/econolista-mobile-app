@@ -32,7 +32,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         authUserName: FirebaseAuth.instance.currentUser?.displayName,
       ),
       appBar: AppBar(
-        title: const Text('EconoLista App'),
+        title: const Text('EconoLista'),
+        centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
