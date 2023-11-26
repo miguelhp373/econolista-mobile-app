@@ -102,6 +102,7 @@ class BarcodeActions extends FetchAPI {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyMedium!.color,
                   ),
