@@ -37,6 +37,7 @@ dependencies:
   http: ^1.1.0
   flutter_barcode_scanner: ^2.0.0
   flutter_native_splash: ^2.3.6
+  floating_action_bubble: ^1.1.4
   
   flutter:
     sdk: flutter

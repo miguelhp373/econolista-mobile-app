@@ -3,17 +3,16 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:econolista_app/app/shared/barcode_actions/barcode_actions.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../../shared/models/product_models.dart';
 import '../../shared/widgets/custom_bool_alert_dialog/custom_bool_alert_dialog.dart';
 import '../../shared/widgets/popup_button_dropdown/popup_button_dropdown.dart';
 import '../../shared/database/shopping_list_collection/shopping_list_collection.dart';
-import '../..//shared/api/fetch_api_bluesoft_cosmos/fetch_api_bluesoft_cosmos.dart';
 
 import '../purchase_product_details/purchase_product_details.dart';
 
@@ -26,52 +25,16 @@ class PurchaseProductsList extends StatefulWidget {
   State<PurchaseProductsList> createState() => _PurchaseProductsListState();
 }
 
-class _PurchaseProductsListState extends State<PurchaseProductsList> {
+class _PurchaseProductsListState extends State<PurchaseProductsList>
+    with SingleTickerProviderStateMixin {
   ///////////////////////////////////////////////////
   late StreamController<Map<String, dynamic>> _productListController;
 
-  String _scanBarcode = 'Desconhecido';
   String isTotalShoppingList = '0,00';
   int isTotalItens = 0;
 
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancelar', true, ScanMode.BARCODE);
-
-      ProductModels productModelsInstance = await FetchApiBluesoftCosmos()
-          .fetchDataWithBarcode(context, barcodeScanRes);
-
-      if (productModelsInstance.apiStatusCode == '200') {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PurchaseProductDetails(
-              productModels: productModelsInstance,
-              shoppingId: widget.shoppingId,
-            ),
-          ),
-        ).then((value) {
-          getProductsList();
-        });
-      }
-    } on PlatformException {
-      barcodeScanRes = 'Falha ao obter a versão da plataforma.';
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Erro, Não Foi Possível Abrir o Leitor de Código de Barras!',
-          ),
-        ),
-      );
-    }
-
-    if (!mounted) return;
-
-    setState(() => _scanBarcode = barcodeScanRes);
-  }
+  late Animation<double> _animation;
+  late AnimationController _animationController;
 
   void getProductsList() async {
     DocumentSnapshot documentSnapshot = await ShoppingListCollection()
@@ -192,6 +155,15 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
     super.initState();
     _productListController = StreamController<Map<String, dynamic>>();
     getProductsList();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   }
 
   @override
@@ -213,7 +185,7 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
                 onRefresh: () => _refreshData(context),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.75,
                   child: SingleChildScrollView(
                     child: StreamBuilder<Map<String, dynamic>>(
                       stream: _productListController.stream,
@@ -416,9 +388,64 @@ class _PurchaseProductsListState extends State<PurchaseProductsList> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(CupertinoIcons.barcode),
-        onPressed: () => scanBarcodeNormal(),
+      floatingActionButton: FloatingActionBubble(
+        // Menu items
+        items: <Bubble>[
+          Bubble(
+            title: "Digitar Código de Barras",
+            iconColor: Colors.white,
+            bubbleColor: Theme.of(context).primaryColor,
+            icon: Icons.keyboard,
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () async {
+              try {
+                final barcodeScanner = await BarcodeActions()
+                    .barcodeInsertModal(context, widget.shoppingId);
+
+                if (barcodeScanner[0]['statusCode'] == 200) getProductsList();
+              } catch (e) {
+                //print(e);
+              }
+
+              _animationController.reverse();
+            },
+          ),
+          //Floating action menu item
+          Bubble(
+            title: "Escanear",
+            iconColor: Colors.white,
+            bubbleColor: Theme.of(context).primaryColor,
+            icon: CupertinoIcons.barcode,
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () async {
+              try {
+                final barcodeScanner = await BarcodeActions()
+                    .scanBarcode(context, widget.shoppingId);
+
+                if (barcodeScanner[0]['statusCode'] == 200) getProductsList();
+              } catch (e) {
+                //print(e);
+              }
+
+              _animationController.reverse();
+            },
+          ),
+        ],
+
+        // animation controller
+        animation: _animation,
+
+        // On pressed change animation state
+        onPress: () => _animationController.isCompleted
+            ? _animationController.reverse()
+            : _animationController.forward(),
+
+        // Floating Action button Icon color
+        iconColor: Colors.white,
+
+        // Flaoting Action button Icon
+        iconData: Icons.add,
+        backGroundColor: Theme.of(context).primaryColorLight,
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16.0),
