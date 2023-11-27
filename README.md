@@ -105,7 +105,7 @@ flutter build apk --split-per-abi --dart-define-from-file=.env
 
 ## Estrutura das Collections Firestore:
 
-### Usuários:
+### [user_collection]:
 
 ```json
 [
@@ -141,7 +141,7 @@ flutter build apk --split-per-abi --dart-define-from-file=.env
 ]
 ```
 
-### Compras:
+### [shopping_list_collection]:
 
 ```json
 [
