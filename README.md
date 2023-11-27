@@ -21,7 +21,7 @@ O projeto EconoLista tem como objetivo proporcionar uma experiência eficiente e
 
 ```bash
 # Clone este repositório:
-git clone https://github.com/seu-usuario/econolista-app
+git clone https://github.com/miguelhp373/econolista-mobile-app
 
 # Entre no diretório:
 cd econolista-app
