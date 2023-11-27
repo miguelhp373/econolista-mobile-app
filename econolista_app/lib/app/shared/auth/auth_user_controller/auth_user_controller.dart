@@ -1,3 +1,5 @@
+import 'package:econolista_app/app/shared/database/user_collection/user_collection.dart';
+import 'package:econolista_app/app/shared/models/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,26 +18,18 @@ class AuthUserController {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if ((snapshot.hasData)) {
-          ///////////////////////////////////////////////////////////////
-          //final userFirebaseInstance = FirebaseAuth.instance.currentUser;
+          final userFirebaseInstance = FirebaseAuth.instance.currentUser;
 
-          // if (userFirebaseInstance != null) {
-          //   PlataformUsersController().putUserIntoPlaform(
-          //     PlataformUsers(
-          //       user_id: '',
-          //       user_email: userFirebaseInstance.email!,
-          //       user_profile_photo: userFirebaseInstance.photoURL!,
-          //       user_name: userFirebaseInstance.displayName!,
-          //       user_notifications: {},
-          //       user_partners: {},
-          //       user_settings: {},
-          //       user_level: '',
-          //       last_access_log: DateTime.now().toString(),
-          //     ),
-          //     context,
-          //   );
-          // }
-          ///////////////////////////////////////////////////////////////
+          if (userFirebaseInstance != null) {
+            UserCollection().putUserCollection(
+              UserModels(
+                userName: userFirebaseInstance.displayName!,
+                userEmail: userFirebaseInstance.email!,
+                userStoreCollection: {},
+              ),
+            );
+          }
+
           return const HomePage();
         }
         return const Login();

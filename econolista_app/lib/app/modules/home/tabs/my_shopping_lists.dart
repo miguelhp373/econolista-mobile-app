@@ -22,7 +22,9 @@ class MyShoppingLists extends StatelessWidget {
         child: StreamBuilder(
           stream: ShoppingListCollection()
               .fetchShoppingList(
-                  FirebaseAuth.instance.currentUser!.uid, 'Aberta')
+                FirebaseAuth.instance.currentUser?.email,
+                'Aberta',
+              )
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
@@ -55,9 +57,7 @@ class MyShoppingLists extends StatelessWidget {
                                 documentSnapshot['DateTimeCreated'],
                               ) +
                               ' | ' +
-                              documentSnapshot['MarketName']
-                                  .toString()
-                                  .substring(0, 14),
+                              documentSnapshot['MarketName'].toString(),
                         ),
                         trailing: PopupButtonDropdown(
                           editingSelectedRegister: () => Navigator.push(

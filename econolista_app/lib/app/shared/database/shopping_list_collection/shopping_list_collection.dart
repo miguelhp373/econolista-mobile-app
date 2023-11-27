@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ShoppingListCollection {
   /////////////////////////////////////////////////////////////////////
 
-  CollectionReference storeCollectionReferenceList =
+  CollectionReference userCollectionReferenceList =
       FirebaseFirestore.instance.collection('user_collection');
 
   CollectionReference shoppingListCollectionReferenceList =
@@ -15,25 +15,25 @@ class ShoppingListCollection {
   /////////////////////////////////////////////////////////////////////
 
   Future<Map<String, dynamic>> getStoreListForDropdownList(
-    String userId,
+    String userEmail,
   ) async {
     //////////////////////////////////////////////////////////
     Map<String, dynamic> result = {'storeNames': <String>[]};
 
-    QuerySnapshot queryStoreCollectionList = await storeCollectionReferenceList
-        .where('UserId', isEqualTo: userId)
+    QuerySnapshot queryStoreCollectionList = await userCollectionReferenceList
+        .where('userEmail', isEqualTo: userEmail)
         .get();
 
     if (queryStoreCollectionList.docs.isNotEmpty) {
       var data =
           queryStoreCollectionList.docs[0].data() as Map<String, dynamic>;
 
-      if (data.containsKey('StoreCollection') &&
-          data['StoreCollection'] is Map) {
-        Map<String, dynamic> storeMap = data['StoreCollection'];
+      if (data.containsKey('userStoreCollection') &&
+          data['userStoreCollection'] is Map) {
+        Map<String, dynamic> storeMap = data['userStoreCollection'];
 
         result['storeNames'] = storeMap.values
-            .map<String>((store) => store['StoreName'] as String)
+            .map<String>((store) => store['storeName'] as String)
             .toList();
       }
     }
@@ -64,7 +64,7 @@ class ShoppingListCollection {
       if (!purchasedModels.purchasedId.isNotEmpty) {
         DocumentReference documentReference =
             await shoppingListCollectionReferenceList.add({
-          "UserId": purchasedModels.userId,
+          "userEmail": purchasedModels.userEmail,
           "Description": purchasedModels.description,
           "DateTimeCreated": purchasedModels.dateTimeCreated,
           "MarketName": purchasedModels.marketName,
@@ -90,7 +90,7 @@ class ShoppingListCollection {
             "MarketName": purchasedModels.marketName,
             "ScheduledPurchase": purchasedModels.futurePuchased,
             //"Status": purchasedModels.status,
-            "ProductsList": {},
+            //"ProductsList": {},
           },
         );
         return [
@@ -113,19 +113,19 @@ class ShoppingListCollection {
     }
   }
 
-  Query<Object?> fetchShoppingList(String userId, String status) {
+  Query<Object?> fetchShoppingList(String? userEmail, String status) {
     final Query getAllShoppingsListFromCollection =
         shoppingListCollectionReferenceList
             .where(
               'Status',
               isEqualTo: status,
             )
-            .where('UserId', isEqualTo: userId);
+            .where('userEmail', isEqualTo: userEmail);
 
     return getAllShoppingsListFromCollection;
   }
 
-  Query<Object?> fetchProductsList(String userId, String shoppingId) {
+  Query<Object?> fetchProductsList(String shoppingId) {
     final DocumentReference shoppingDocumentRef =
         shoppingListCollectionReferenceList.doc(shoppingId);
 
@@ -276,7 +276,7 @@ class ShoppingListCollection {
             productList.remove(productIndex);
 
             // Reorganizar os índices
-            productList = reorganizeProductListIndexes(productList);
+            productList = _reorganizeProductListIndexes(productList);
 
             // Atualizar os dados no Firestore
             await documentReference.update({'ProductsList': productList});
@@ -299,7 +299,7 @@ class ShoppingListCollection {
     }
   }
 
-  Map<String, dynamic> reorganizeProductListIndexes(
+  Map<String, dynamic> _reorganizeProductListIndexes(
       Map<String, dynamic> productList) {
     // Converter chaves para inteiros e ordenar
     List<int> indexes = productList.keys.map((key) => int.parse(key)).toList();

@@ -1,6 +1,6 @@
 class PurchasedModels {
   String purchasedId;
-  String userId;
+  String userEmail;
   String description;
   DateTime dateTimeCreated;
   List<Map> productsList;
@@ -10,7 +10,7 @@ class PurchasedModels {
 
   PurchasedModels({
     this.purchasedId = '',
-    this.userId = '',
+    this.userEmail = '',
     this.description = '',
     required this.dateTimeCreated,
     required this.productsList,
@@ -22,7 +22,7 @@ class PurchasedModels {
   factory PurchasedModels.fromJson(Map<String, dynamic> json) {
     return PurchasedModels(
       purchasedId: json['purchasedID'],
-      userId: json['userId'],
+      userEmail: json['userEmail'],
       description: json['description'],
       dateTimeCreated: json['dateTimeCreated'],
       productsList: json['productsList'],
@@ -35,7 +35,7 @@ class PurchasedModels {
   Map<String, dynamic> toJson() {
     return {
       'purchasedID': purchasedId,
-      'userId': userId,
+      'userEmail': userEmail,
       'description': description,
       'dateTimeCreated': dateTimeCreated,
       'productsList': productsList,

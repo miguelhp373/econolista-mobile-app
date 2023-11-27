@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       drawer: DrawerSidebar(
         authUserPhoto: FirebaseAuth.instance.currentUser?.photoURL,
         authUserName: FirebaseAuth.instance.currentUser?.displayName,
+        authUserEmail: FirebaseAuth.instance.currentUser?.email,
       ),
       appBar: AppBar(
         title: const Text('EconoLista'),

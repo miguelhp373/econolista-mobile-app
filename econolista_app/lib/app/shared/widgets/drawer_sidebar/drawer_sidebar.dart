@@ -1,3 +1,4 @@
+import 'package:econolista_app/app/modules/supermarket_list/supermarket_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../auth/auth_user_controller/auth_user_controller.dart';
@@ -8,10 +9,12 @@ class DrawerSidebar extends StatelessWidget {
     super.key,
     this.authUserPhoto,
     this.authUserName,
+    this.authUserEmail,
   });
 
   final String? authUserPhoto;
   final String? authUserName;
+  final String? authUserEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +61,23 @@ class DrawerSidebar extends StatelessWidget {
                     ),
                   ],
                 )),
-            // ListTile(
-            //   leading: const Icon(Icons.settings),
-            //   title: const Text('Configurações'),
-            //   onTap: () => {Navigator.of(context).pushNamed('/settings_page')},
-            // ),
+            ListTile(
+              leading: const Icon(Icons.store),
+              title: Text(
+                'Lista de Supermercados',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+              ),
+              onTap: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SupermarketList(userEmail: authUserEmail),
+                  ),
+                )
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Sair'),

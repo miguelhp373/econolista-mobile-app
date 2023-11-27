@@ -160,7 +160,7 @@ class BarcodeActions extends FetchAPI {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                'Erro, Não Foi Possível Abrir o Leitor de Código de Barras!',
+                                'Erro, Não Foi Possível Consultar o Código de Barras!',
                               ),
                             ),
                           );

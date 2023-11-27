@@ -35,6 +35,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
   final _formKey = GlobalKey<FormState>();
 
   final _userAuthId = FirebaseAuth.instance.currentUser?.uid;
+  final _userAuthEmail = FirebaseAuth.instance.currentUser?.email;
 
   void _submitForm(
       BuildContext context, PurchasedModels purchasedModels) async {
@@ -129,7 +130,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
         widget.purchasedModels.status == 'Aberta' ? true : false;
 
     isShoppingListCollection =
-        ShoppingListCollection().getStoreListForDropdownList(_userAuthId!);
+        ShoppingListCollection().getStoreListForDropdownList(_userAuthEmail!);
 
     _isMarketNameSelected = widget.purchasedModels.marketName == ''
         ? 'Selecione o Supermercado'
@@ -415,7 +416,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                             context,
                             PurchasedModels(
                               purchasedId: _purchasedId!,
-                              userId: _userAuthId!,
+                              userEmail: _userAuthEmail!,
                               description: _descriptionTextInput.text,
                               dateTimeCreated: DateTime.parse(
                                   _dateTimeCreatedTextInput.text),
