@@ -1,0 +1,284 @@
+[
+    {
+        "DateTimeCreated": "__Timestamp__2023-12-05T21:31:53.092Z",
+        "Description": "Compra Mensal",
+        "MarketName": "Supermercado Peralta",
+        "ProductsList": {
+            "0": {
+                "id": "0",
+                "productBarcode": "7891962027418",
+                "productDescription": "PANETTONE COM GOTAS DE CHOCOLATE VISCONTI CAIXA 400G",
+                "productId": "",
+                "productName": "PANETTONE COM GOTAS DE CHOCOLATE VISCONTI CAIXA 400G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891962027418",
+                "productPrice": 16.99,
+                "productQuantity": 1
+            },
+            "1": {
+                "id": "1",
+                "productBarcode": "7891000379691",
+                "productDescription": "ACHOCOLATADO PÓ NESCAU LATA 370G",
+                "productId": "",
+                "productName": "ACHOCOLATADO PÓ NESCAU LATA 370G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891000379691",
+                "productPrice": 6.97,
+                "productQuantity": 1
+            },
+            "2": {
+                "id": "2",
+                "productBarcode": "7896000594679",
+                "productDescription": "SUCO CONCENTRADO MARACUJÁ MAGUARY GARRAFA 1L",
+                "productId": "",
+                "productName": "SUCO CONCENTRADO MARACUJÁ MAGUARY GARRAFA 1L",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896000594679",
+                "productPrice": 13.99,
+                "productQuantity": 1
+            },
+            "3": {
+                "id": "3",
+                "productBarcode": "7891910000197",
+                "productDescription": "AÇÚCAR REFINADO UNIÃO 1KG",
+                "productId": "",
+                "productName": "AÇÚCAR REFINADO UNIÃO 1KG",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891910000197",
+                "productPrice": 4.39,
+                "productQuantity": 1
+            },
+            "4": {
+                "id": "4",
+                "productBarcode": "7896089322040",
+                "productDescription": "VINAGRE DE ÁLCOOL COLORIDO PEIXE FRASCO 750ML",
+                "productId": "",
+                "productName": "VINAGRE DE ÁLCOOL COLORIDO PEIXE FRASCO 750ML",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896089322040",
+                "productPrice": 1.45,
+                "productQuantity": 2
+            },
+            "5": {
+                "id": "5",
+                "productBarcode": "7896256066005",
+                "productDescription": "VINAGRE KODILAR 500ML MACA S/GLUTEN",
+                "productId": "",
+                "productName": "VINAGRE KODILAR 500ML MACA S/GLUTEN",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896256066005",
+                "productPrice": 5.99,
+                "productQuantity": 1
+            },
+            "6": {
+                "id": "6",
+                "productBarcode": "7898247780297",
+                "productDescription": "ÓLEO DE SOJA VITALIV GARRAFA 900ML",
+                "productId": "",
+                "productName": "ÓLEO DE SOJA VITALIV GARRAFA 900ML",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7898247780297",
+                "productPrice": 5.7,
+                "productQuantity": 2
+            },
+            "7": {
+                "id": "7",
+                "productBarcode": "7896102501872",
+                "productDescription": "MOLHO DE TOMATE TRADICIONAL QUERO SACHÊ 300G",
+                "productId": "",
+                "productName": "MOLHO DE TOMATE TRADICIONAL QUERO SACHÊ 300G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896102501872",
+                "productPrice": 1.69,
+                "productQuantity": 7
+            },
+            "8": {
+                "id": "8",
+                "productBarcode": "7891079011799",
+                "productDescription": "MACARRÃO INSTANTÂNEO YAKISSOBA TRADICIONAL NISSIN MIOJO PACOTE 87G",
+                "productId": "",
+                "productName": "MACARRÃO INSTANTÂNEO YAKISSOBA TRADICIONAL NISSIN MIOJO PACOTE 87G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891079011799",
+                "productPrice": 2.55,
+                "productQuantity": 2
+            },
+            "9": {
+                "id": "9",
+                "productBarcode": "7891079014028",
+                "productDescription": "MACARRÃO INSTANTÂNEO LÁMEN GALINHA CAIPIRA PICANTE NISSIN MIOJO PACOTE 85G",
+                "productId": "",
+                "productName": "MACARRÃO INSTANTÂNEO LÁMEN GALINHA CAIPIRA PICANTE NISSIN MIOJO PACOTE 85G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891079014028",
+                "productPrice": 2.35,
+                "productQuantity": 1
+            },
+            "10": {
+                "id": "10",
+                "productBarcode": "7891079000205",
+                "productDescription": "MACARRÃO INSTANTÂNEO LÁMEN CARNE NISSIN MIOJO PACOTE 85G",
+                "productId": "",
+                "productName": "MACARRÃO INSTANTÂNEO LÁMEN CARNE NISSIN MIOJO PACOTE 85G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891079000205",
+                "productPrice": 2.55,
+                "productQuantity": 1
+            },
+            "11": {
+                "id": "11",
+                "productBarcode": "7896114101916",
+                "productDescription": "QUEIJO RALADO IPANEMA 40G GROSSO",
+                "productId": "",
+                "productName": "QUEIJO RALADO IPANEMA 40G GROSSO",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896114101916",
+                "productPrice": 3.99,
+                "productQuantity": 6
+            },
+            "12": {
+                "id": "12",
+                "productBarcode": "7898951850095",
+                "productDescription": "MACARRÃO COM OVOS PENNE RIGATE BARILLA PACOTE 500G",
+                "productId": "",
+                "productName": "MACARRÃO COM OVOS PENNE RIGATE BARILLA PACOTE 500G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7898951850095",
+                "productPrice": 4.55,
+                "productQuantity": 1
+            },
+            "13": {
+                "id": "13",
+                "productBarcode": "8005121000146",
+                "productDescription": "MACARRÃO DE SÊMOLA GRANO DURO LINGUINE 14 DIVELLA PACOTE 500G",
+                "productId": "",
+                "productName": "MACARRÃO DE SÊMOLA GRANO DURO LINGUINE 14 DIVELLA PACOTE 500G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/8005121000146",
+                "productPrice": 6.99,
+                "productQuantity": 2
+            },
+            "14": {
+                "id": "14",
+                "productBarcode": "7891999004888",
+                "productDescription": "MAIONESE VIGOR POTE 500G",
+                "productId": "",
+                "productName": "MAIONESE VIGOR POTE 500G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891999004888",
+                "productPrice": 5.29,
+                "productQuantity": 1
+            },
+            "15": {
+                "id": "15",
+                "productBarcode": "7896102502756",
+                "productDescription": "KETCHUP TRADICIONAL QUERO SQUEEZE 400G",
+                "productId": "",
+                "productName": "KETCHUP TRADICIONAL QUERO SQUEEZE 400G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896102502756",
+                "productPrice": 5.99,
+                "productQuantity": 1
+            },
+            "16": {
+                "id": "16",
+                "productBarcode": "7898416520099",
+                "productDescription": "TEMPERO KISABOR CEBOLA ALHO SAL",
+                "productId": "",
+                "productName": "TEMPERO KISABOR CEBOLA ALHO SAL",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7898416520099",
+                "productPrice": 6.99,
+                "productQuantity": 1
+            },
+            "17": {
+                "id": "17",
+                "productBarcode": "7898215151784",
+                "productDescription": "CREME DE LEITE UHT LEVE HOMOGENEIZADO PIRACANJUBA CAIXA 200G",
+                "productId": "",
+                "productName": "CREME DE LEITE UHT LEVE HOMOGENEIZADO PIRACANJUBA CAIXA 200G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7898215151784",
+                "productPrice": 2.49,
+                "productQuantity": 2
+            },
+            "18": {
+                "id": "18",
+                "productBarcode": "7896486202884",
+                "productDescription": "BISCOITO PRODASA COQUINHO",
+                "productId": "",
+                "productName": "BISCOITO PRODASA COQUINHO",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896486202884",
+                "productPrice": 3.69,
+                "productQuantity": 1
+            },
+            "19": {
+                "id": "19",
+                "productBarcode": "7892840815912",
+                "productDescription": "SALGADINHO DE MILHO QUEIJO NACHO DORITOS PACOTE 84G",
+                "productId": "",
+                "productName": "SALGADINHO DE MILHO QUEIJO NACHO DORITOS PACOTE 84G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7892840815912",
+                "productPrice": 6.99,
+                "productQuantity": 1
+            },
+            "20": {
+                "id": "20",
+                "productBarcode": "7896005223512",
+                "productDescription": "BISCOITO INTEGRAL SOL SALT PLUS PACOTE 360G",
+                "productId": "",
+                "productName": "BISCOITO INTEGRAL SOL SALT PLUS PACOTE 360G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896005223512",
+                "productPrice": 6.49,
+                "productQuantity": 1
+            },
+            "21": {
+                "id": "21",
+                "productBarcode": "7891021001946",
+                "productDescription": "FILTRO DE PAPEL ORIGINAL MELITTA 103 CAIXA 30 UNIDADES",
+                "productId": "",
+                "productName": "FILTRO DE PAPEL ORIGINAL MELITTA 103 CAIXA 30 UNIDADES",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7891021001946",
+                "productPrice": 3.69,
+                "productQuantity": 1
+            },
+            "22": {
+                "id": "22",
+                "productBarcode": "7896089013849",
+                "productDescription": "CAFÉ TORRADO E MOÍDO A VÁCUO PILÃO 252 GRAUS PACOTE 500G",
+                "productId": "",
+                "productName": "CAFÉ TORRADO E MOÍDO A VÁCUO PILÃO 252 GRAUS PACOTE 500G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896089013849",
+                "productPrice": 18.98,
+                "productQuantity": 1
+            },
+            "23": {
+                "id": "23",
+                "productBarcode": "7898931140659",
+                "productDescription": "BATATA PALHA CONFRARIA CXA 1 X 15 400G",
+                "productId": "",
+                "productName": "BATATA PALHA CONFRARIA CXA 1 X 15 400G",
+                "productPhotoUrl": "",
+                "productPrice": 10.5,
+                "productQuantity": 1
+            },
+            "24": {
+                "id": "24",
+                "productBarcode": "7896090704460",
+                "productDescription": "ÁLCOOL GEL 70º INPM COPERALCOOL BACFREE FRASCO 400G",
+                "productId": "",
+                "productName": "ÁLCOOL GEL 70º INPM COPERALCOOL BACFREE FRASCO 400G",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/7896090704460",
+                "productPrice": 16.95,
+                "productQuantity": 1
+            }
+        },
+        "ScheduledPurchase": false,
+        "Status": "Aberta",
+        "__id__": "AsXLKsPDqRrN9ZDzXNMO",
+        "userEmail": "miguelhp373@gmail.com"
+    },
+    {
+        "DateTimeCreated": "__Timestamp__2023-11-27T00:31:43.237Z",
+        "Description": "Compras diária",
+        "MarketName": "Mercado Teste",
+        "ProductsList": {
+            "0": {
+                "id": "0",
+                "productBarcode": "4005900707536",
+                "productDescription": "ANTITRANSPIRANTE AEROSSOL CARVÃO ATIVADO NIVEA MEN DEEP 150ML SPRAY",
+                "productId": "",
+                "productName": "ANTITRANSPIRANTE AEROSSOL CARVÃO ATIVADO NIVEA MEN DEEP 150ML SPRAY",
+                "productPhotoUrl": "https://cdn-cosmos.bluesoft.com.br/products/4005900707536",
+                "productPrice": 211.07,
+                "productQuantity": 1
+            }
+        },
+        "ScheduledPurchase": false,
+        "Status": "Aberta",
+        "__id__": "LaroJO5BgOpaeawtLth9",
+        "userEmail": "miguelgamer373@gmail.com"
+    }
+]
