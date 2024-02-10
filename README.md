@@ -37,11 +37,15 @@ flutter pub get
 ### Configuração do Arquivo `.env`:
 
 **Crie um arquivo `.env` na raiz do projeto com os seguintes dados:**
-```plaintext
-FIREBASE_ANDROID_API_KEY=SUA_CHAVE_DE_API_ANDROID
-FIREBASE_IOS_API_KEY=SUA_CHAVE_DE_API_IOS
-API_END_POINT='api.cosmos.bluesoft.com.br'
-API_KEY_COSMOS_BLUESOFT=SUA_CHAVE_COSMOS_BLUESOFT
+```json
+{
+    "FIREBASE_API_KEY" : "sua chave da api firebase",
+    "API_VERSION" : "V1",
+    "API_END_POINT_V1" : "api.cosmos.bluesoft.com.br",
+    "API_KEY_V1" : "SUA_CHAVE_COSMOS_BLUESOFT",
+    "API_END_POINT_V2" : "api.mercadolibre.com",
+    "API_KEY_V2" : "SUA_CHAVE_MERCADO_LIVRE"
+}
 ```
 
 ### Inicie o Aplicativo:
