@@ -13,7 +13,7 @@ class FetchAPI {
 
     var apiVersion = const String.fromEnvironment('API_VERSION');
 
-    Response response = (apiVersion == 'V2'
+    Response response = (apiVersion == 'V1'
         ? await BlueCosmosFetchAPI().fetchDataWithBarcode(barcodeGTIN)
         : await MercadoLivreFetchAPI().fetchDataWithBarcode(barcodeGTIN));
 
