@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_ANDROID_API_KEY'),
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY'),
     appId: '1:444515307922:android:e739a1d91d671fe819314b',
     messagingSenderId: '444515307922',
     projectId: 'econolista-app',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_IOS_API_KEY'),
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY'),
     appId: '1:444515307922:ios:15e4d0a65928c37719314b',
     messagingSenderId: '444515307922',
     projectId: 'econolista-app',
