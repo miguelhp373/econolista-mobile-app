@@ -100,7 +100,7 @@ class DrawerSidebar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Versão 1.0.0',
+                    'Versão 1.1.0',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:econolista_app/app/shared/barcode_actions/barcode_actions.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -222,10 +223,17 @@ class _PurchaseProductsListState extends State<PurchaseProductsList>
                                                       null &&
                                                   product['productPhotoUrl'] !=
                                                       ''
-                                              ? Image.network(
-                                                  product['productPhotoUrl'],
+                                              ? CachedNetworkImage(
+                                                  imageUrl: product[
+                                                      'productPhotoUrl'],
                                                   width: 50,
                                                   height: 50,
+                                                  placeholder: (context, url) =>
+                                                      const CircularProgressIndicator(), // Widget a ser exibido enquanto a imagem está sendo carregada
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons
+                                                          .error), // Widget a ser exibido se houver erro ao carregar a imagem
                                                 )
                                               : const SizedBox(
                                                   width: 50,
@@ -392,26 +400,6 @@ class _PurchaseProductsListState extends State<PurchaseProductsList>
         // Menu items
         items: <Bubble>[
           Bubble(
-            title: "Digitar Código de Barras",
-            iconColor: Colors.white,
-            bubbleColor: Theme.of(context).primaryColor,
-            icon: Icons.keyboard,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
-            onPress: () async {
-              try {
-                final barcodeScanner = await BarcodeActions()
-                    .barcodeInsertModal(context, widget.shoppingId);
-
-                if (barcodeScanner[0]['statusCode'] == 200) getProductsList();
-              } catch (e) {
-                //print(e);
-              }
-
-              _animationController.reverse();
-            },
-          ),
-          //Floating action menu item
-          Bubble(
             title: "Escanear",
             iconColor: Colors.white,
             bubbleColor: Theme.of(context).primaryColor,
@@ -430,6 +418,44 @@ class _PurchaseProductsListState extends State<PurchaseProductsList>
               _animationController.reverse();
             },
           ),
+          Bubble(
+            title: "Digitar Código de Barras",
+            iconColor: Colors.white,
+            bubbleColor: Theme.of(context).primaryColor,
+            icon: Icons.keyboard,
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () async {
+              try {
+                final barcodeScanner = await BarcodeActions()
+                    .barcodeInsertModal(context, widget.shoppingId);
+
+                if (barcodeScanner[0]['statusCode'] == 200) getProductsList();
+              } catch (e) {
+                //print(e);
+              }
+
+              _animationController.reverse();
+            },
+          ),
+          Bubble(
+            title: "Adicionar Produto Manualmente",
+            iconColor: Colors.white,
+            bubbleColor: Theme.of(context).primaryColor,
+            icon: Icons.edit_note,
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () async {
+              try {
+                final barcodeScanner = await BarcodeActions()
+                    .barcodeInsertModal(context, widget.shoppingId);
+
+                if (barcodeScanner[0]['statusCode'] == 200) getProductsList();
+              } catch (e) {
+                //print(e);
+              }
+
+              _animationController.reverse();
+            },
+          )
         ],
 
         // animation controller

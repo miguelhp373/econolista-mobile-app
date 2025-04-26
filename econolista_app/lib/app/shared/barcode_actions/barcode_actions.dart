@@ -31,7 +31,7 @@ class BarcodeActions extends FetchAPI {
       );
 
       productModels = await fetchDataWithBarcode(barcodeScannerResponse);
-
+      print(productModels.apiStatusCode);
       if (productModels.apiStatusCode == '200') {
         await Navigator.push(
           context,

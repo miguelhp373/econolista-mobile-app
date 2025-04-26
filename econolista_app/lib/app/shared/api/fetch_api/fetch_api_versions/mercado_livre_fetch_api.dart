@@ -31,12 +31,14 @@ class MercadoLivreFetchAPI {
       if (results.isNotEmpty) {
         var firstResult = results.first;
         var productName = firstResult['name'];
+        var productNameDecoded = utf8.decode(productName.runes.toList());
         var productPhotoUrl = firstResult['pictures'][0]['url'];
+        productPhotoUrl = productPhotoUrl.replaceFirst('http://', 'https://');
         var productBarcode = jsonResponse['product_identifier'];
 
         // Cria um novo mapa com os dados relevantes
         var responseData = {
-          'description': productName,
+          'description': productNameDecoded,
           'gtin': productBarcode,
           'thumbnail': productPhotoUrl,
           // Adicione outros campos relevantes conforme necessário
